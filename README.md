@@ -35,10 +35,11 @@ bash scripts/kickstart-install.sh --merge
 
 > 合并（不覆盖既有配置）的安全语义与手动复制方法，见 [docs/installation.md](docs/installation.md#2-铺装配置文件)。
 
-### 步骤 3 —— 配置模型并选装扩展
+### 步骤 3 —— 配置全局行为与模型，选装扩展
 
-1. 配置模型供应商与鉴权（`models.json` / `auth.json` / `settings.json`）：见 [docs/installation-models.md](docs/installation-models.md)。
-2. 按需安装扩展与技能，从推荐基线挑选：见 [docs/installation.md](docs/installation.md#3-选装扩展与技能)。
+1. **配置全局 AGENTS.md**，让 agent 思考与回答都使用中文：见 [docs/installation-agents.md](docs/installation-agents.md)。
+2. 配置模型供应商与鉴权（`models.json` / `auth.json` / `settings.json`）：见 [docs/installation-models.md](docs/installation-models.md)。
+3. 按需安装扩展与技能，从推荐的部署基线挑选：见 [docs/installation.md](docs/installation.md#3-选装扩展与技能)。
 
 ---
 
@@ -55,9 +56,11 @@ bash scripts/kickstart-install.sh --merge
 | `docs/installation.md` | **核心文档**：三步完成部署 + 可选扩展「推荐部署基线」+ 全部扩展索引表 |
 | `docs/installation-models.md` | 模型供应商通用模板、`auth.json` 鉴权、模型选择链路（`settings.json`）|
 | `docs/installation-mcp.md` | **推荐必装**：MCP 三件套（exa / context7 / searchcode），含 `mcp.json` 配置、`AGENTS.md` 指引与接入任意第三方 MCP 的通用做法 |
+| `docs/installation-agents.md` | 全局 AGENTS.md：中文语言要求（思考与回答） + MCP 指引 |
 | `docs/installation-codegraph.md` | codegraph 代码理解：语义搜索 / 调用图 / 变更影响分析 |
-| `docs/installation-subagents.md` | pi-subagents：并行多子代理的任务处理 |
-| `docs/installation-permission-system.md` | pi-permission-system：操作权限强制管控 |
+| `docs/installation-subagents.md` | pi-subagents：Claude Code 风格自主子代理（完整）|
+| `docs/installation-subagents-lite.md` | pi-subagents-lite：最小 token 开销的轻量子代理 |
+| `docs/installation-permission-system.md` | pi-permission-system：allow / deny / ask 权限强制管控 |
 | `docs/installation-sol-pi.md` | SoL-Pi：长上下文优化（压缩 / 打包）|
 | `docs/installation-rtk-optimizer.md` | pi-rtk-optimizer：Token 消耗优化 |
 | `docs/installation-open-tui.md` | pi-open-tui：终端 TUI 交互界面 |

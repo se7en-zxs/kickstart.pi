@@ -8,7 +8,9 @@
 
 > **关于 MCP**：联网检索（exa / context7 / searchcode）三件套是关联部署的**推荐必装**，能立即获得联网搜索、库文档、开源代码检索能力（见 [installation-mcp.md](installation-mcp.md)）。若团队明确「离线自足」也可跳过，只是 pi 会少了联网工具。
 
-每一步都可在单独的文章里展开。建议先完整读完本文，再根据团队的「部署基线」逐个安装需要的扩展。
+> **关于语言**：若希望 agent 在**思考与回答时都使用中文**，请在全局 `~/.pi/agent/AGENTS.md` 声明中文为默认语言（见 [installation-agents.md](installation-agents.md)）。
+
+每一步都可在单独的文章里展开；建议先完整读完本文，再根据团队的「部署基线」逐个安装需要的扩展。
 
 > **约定**：下文以 `~/.pi/agent` 作为 pi 的全局配置目录（默认路径）。若你的环境中 pi 配置目录不同，请把命令中的路径替换成实际路径。
 
@@ -74,6 +76,12 @@ pi 的行为由 `~/.pi/agent` 下的几个 JSON 文件决定。本仓库提供�
 | 全新机器（无既有 `~/.pi/agent`） | **覆盖（fresh）** | 尚无配置，直接铺装模板即可 |
 | 已有环境（机器上装过 pi） | **合并（merge）** | 保留既有配置，只补充缺失项，**不覆盖**用户已有设置 |
 
+> ⚠️ **动手前先留份备份**：无论选哪种方式，改动前建议先把既有配置挪走备一份，例如
+> ```bash
+> [ -d ~/.pi/agent ] && cp -r ~/.pi/agent ~/.pi/agent.bak
+> ```
+> 这样出错可一键回滚（`cp -an ~/.pi/agent.bak/. ~/.pi/agent/`）。
+
 ### 方式 A：使用一键脚本（推荐，见 `scripts/kickstart-install.sh`）
 
 ```bash
@@ -119,8 +127,10 @@ pi 的能力通过 **扩展包** 与 **技能** 增强。扩展通过 `pi instal
 | 类别 | 扩展/技能 | 安装文档 |
 |---|---|---|
 | 联网检索（必装） | MCP 服务器（exa / context7 / searchcode） | [installation-mcp.md](installation-mcp.md) |
+| 全局行为（必装） | 全局 AGENTS.md（不含中文语言要求 + MCP 指引） | [installation-agents.md](installation-agents.md) |
 | 代码理解 | codegraph | [installation-codegraph.md](./installation-codegraph.md) |
-| 多代理 | pi-subagents | [installation-subagents.md](./installation-subagents.md) |
+| 多代理（完整） | pi-subagents | [installation-subagents.md](./installation-subagents.md) |
+| 多代理（轻量） | pi-subagents-lite | [installation-subagents-lite.md](./installation-subagents-lite.md) |
 | 权限管控 | pi-permission-system | [installation-permission-system.md](./installation-permission-system.md) |
 | 长上下文 | SoL-Pi | [installation-sol-pi.md](./installation-sol-pi.md) |
 | Token 优化 | pi-rtk-optimizer | [installation-rtk-optimizer.md](./installation-rtk-optimizer.md) |
@@ -138,13 +148,15 @@ pi 的能力通过 **扩展包** 与 **技能** 增强。扩展通过 `pi instal
 | pi-mcp-adapter | 联网/MCP | MCP 服务器适配器，接入外部 MCP | 见官方 pi.dev |
 | exa / context7 / searchcode | 联网/MCP | 推荐的搜索 MCP | [installation-mcp.md](./installation-mcp.md) |
 | codegraph | 代码理解 | 语义代码搜索、调用图、变更影响分析 | [installation-codegraph.md](./installation-codegraph.md) |
-| pi-subagents / pi-subagents-lite | 多代理 | 并行子代理工作 | [installation-subagents.md](./installation-subagents.md) |
-| pi-permission-system | 权限 | 权限强制管控扩展 | [installation-permission-system.md](./installation-permission-system.md) |
+| pi-subagents | 多代理 | Claude Code 风格自主子代理（完整） | [installation-subagents.md](./installation-subagents.md) |
+| pi-subagents-lite | 多代理 | 最小 token 开销的子代理（轻量） | [installation-subagents-lite.md](./installation-subagents-lite.md) |
+| @gotgenes/pi-permission-system | 权限 | 权限强制管控（allow/deny/ask） | [installation-permission-system.md](./installation-permission-system.md) |
 | SoL-Pi | 长上下文 | 长上下文自演化优化 | [installation-sol-pi.md](./installation-sol-pi.md) |
 | pi-rtk-optimizer | Token | RTK / token 优化 | [installation-rtk-optimizer.md](./installation-rtk-optimizer.md) |
 | pi-open-tui | 交互 | 终端 TUI 界面 | [installation-open-tui.md](./installation-open-tui.md) |
 | pi-deepseek-cache | 缓存 | deepseek 缓存命中 | [installation-deepseek-cache.md](./installation-deepseek-cache.md) |
 | mattpocock skills | 技能 | 工程化提示技能集 | [installation-matt-pocock-skills.md](./installation-matt-pocock-skills.md) |
+| 全局 AGENTS.md | 全局行为 | 中文语言要求 + MCP 指引 | [installation-agents.md](./installation-agents.md) |
 | 主题 / 美化 | 外观 | 界面主题、美化 | [installation-theme.md](./installation-theme.md) |
 | openspec | 规格 | OpenSpec 规范工作流 | 见官方 |
 | superpowers | 技能 | 超能力技能集 | 见官方 |
@@ -171,7 +183,8 @@ pi 的能力通过 **扩展包** 与 **技能** 增强。扩展通过 `pi instal
 
 ## 下一步
 
-- 安装**联网 MCP 三件套**（exa / context7 / searchcode）并配置 `AGENTS.md` 指引，见 [installation-mcp.md](installation-mcp.md)。
+- **配置全局 AGENTS.md**（中文语言要求 + MCP 指引），见 [installation-agents.md](installation-agents.md)。
+- 安装**联网 MCP 三件套**（exa / context7 / searchcode），见 [installation-mcp.md](installation-mcp.md)。
 - 配置模型供应商与鉴权，见 [installation-models.md](installation-models.md)（含 `models.json` 通用模板与 `auth.json` 鉴权说明）。
 - 完整了解各扩展，按「第 3 节」的表格逐个安装。
 
