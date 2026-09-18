@@ -51,10 +51,10 @@ bash scripts/kickstart-install.sh --merge
 | `README.md` | 本文件：项目简介 + 快速入门三步走 + 文档索引 |
 | `.gitignore` | 忽略本地会话目录（`.pi/`）、临时文件（`*.swp`）、鉴权文件（`auth.json`）等 |
 | `CONTEXT.md` | 术语表：全仓库核心主体与配置文件术语的统一定义 |
-| `scripts/kickstart-install.sh` | 一键铺装脚本（`--fresh` 全新部署 / `--merge` 已有环境保留配置） |
+| `scripts/kickstart-install.sh` | 一键铺装脚本（`--fresh` 全新部署 / `--merge` 已有环境保留配置），铺出 `settings/models/mcp` 骨架与 MCP 三件套 |
 | `docs/installation.md` | **核心文档**：三步完成部署 + 可选扩展「推荐部署基线」+ 全部扩展索引表 |
 | `docs/installation-models.md` | 模型供应商通用模板、`auth.json` 鉴权、模型选择链路（`settings.json`）|
-| `docs/installation-mcp.md` | MCP 服务器接入：exa / context7 / searchcode 等，及接入任意第三方 MCP 的通用做法 |
+| `docs/installation-mcp.md` | **推荐必装**：MCP 三件套（exa / context7 / searchcode），含 `mcp.json` 配置、`AGENTS.md` 指引与接入任意第三方 MCP 的通用做法 |
 | `docs/installation-codegraph.md` | codegraph 代码理解：语义搜索 / 调用图 / 变更影响分析 |
 | `docs/installation-subagents.md` | pi-subagents：并行多子代理的任务处理 |
 | `docs/installation-permission-system.md` | pi-permission-system：操作权限强制管控 |
@@ -62,7 +62,7 @@ bash scripts/kickstart-install.sh --merge
 | `docs/installation-rtk-optimizer.md` | pi-rtk-optimizer：Token 消耗优化 |
 | `docs/installation-open-tui.md` | pi-open-tui：终端 TUI 交互界面 |
 | `docs/installation-deepseek-cache.md` | pi-deepseek-cache：DeepSeek 模型缓存加速 |
-| `docs/installation-matt-pocock-skills.md` | mattpocock skills：工程化提示技能集 |
+| `docs/installation-matt-pocock-skills.md` | mattpocock skills：`npx skills` 命令行安装的工程技能集（grilling / TDD / 调试 / 评审等）|
 | `docs/installation-theme.md` | 主题 / 美化：界面观感调节 |
 
 > 每个 `docs/installation-*.md` 都自含 **Install / Verify / Activate / Uninstall** 四个章节，可独立照做。

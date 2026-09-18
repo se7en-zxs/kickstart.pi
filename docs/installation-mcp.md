@@ -1,83 +1,92 @@
 # 联网检索：MCP 服务器（exa / context7 / searchcode）
 
-MCP（Model Context Protocol）让 pi 能调用外部工具服务器，实现联网搜索、代码检索、API 查询等能力。本文以三个常用搜索类 MCP——**exa**、**context7**、**searchcode**——为例，说明如何为 pi 挂载外部 MCP 服务器。
+MCP（Model Context Protocol）让 pi 能调用外部工具服务器，实现联网搜索、库文档检索、公开仓库代码搜索等能力。本文安装三个**推荐必装**的搜索类 MCP——**exa**、**context7**、**searchcode**——并说明接入任意第三方 MCP 的通用做法。
 
-> 如果你需要接入**其它第三方 MCP（含各类联网工具）**，本页「第 4 节」给出了通用做法，各工具的官方推荐为准。
+> pi 原生架构并不以 MCP 为核心，而是围绕扩展/技能加载进自家进程。**为什么还要 MCP 桥？** 因为更广的 agent 生态（Context7、SearchCode、Exa 及多数第三方工具）都讲 MCP。`pi-mcp-adapter` 加几个 MCP server，就是让 pi 与该生态保持兼容的桥梁。
 
 ---
 
-## 1. MCP 在 pi 中的承载方式
+## 1. 安装 MCP 适配器
 
-- MCP 服务器配置写在 `~/.pi/agent/mcp.json`。
-- pi 通过 **pi-mcp-adapter** 等适配器桥接外部 MCP 服务器，或在 `mcp.json` 中直接声明。
-- 每个 MCP server 可设 `lifecycle`（`eager` / `lazy`）控制是否随 pi 启动即加载。
-
-### 安装 pi-mcp-adapter（可选前提）
-
-若你的 MCP 需要经过适配器挂载，可先用 pi 安装扩展：
+pi 通过 **pi-mcp-adapter** 与外部 MCP 服务器通信。先安装适配器扩展：
 
 ```bash
 pi install npm:pi-mcp-adapter
 ```
 
-## 2. 推荐的三个联网 MCP
+> **Note**：pi 原生是没有 MCP 的。这个适配器包就是 pi 讲 MCP 话的翻译层，属于必备前提。
 
-| MCP | 用途 | 类型 |
-|---|---|---|
-| **exa** | 面向「研究/搜索」的语义搜索引擎 | 搜索类 MCP |
-| **context7** | 框架/库最新文档与上下文检索 | 文档类 MCP |
-| **searchcode** | 代码片段与开源代码搜索 | 代码类 MCP |
+## 2. 在 mcp.json 声明三个 MCP 服务器
 
-> 三者共用「在 `mcp.json` 声明 server」的接入方式，仅 `baseUrl` / 鉴权不同。
+创建或更新 `~/.pi/agent/mcp.json`。**若文件已含其它 MCP 服务器，请把下列条目**合并**进其 `mcpServers` 对象，不要整体替换文件；若条目已存在，保留既有配置，避免重复。**
 
-## 3. 在 mcp.json 中声明 MCP 服务器
-
-以 `mcp.json`（位于 `~/.pi/agent/mcp.json`）声明这三个 server，占位符替换为你的真实配置与密钥：
-
-```jsonc
+```json
 {
   "mcpServers": {
     "exa": {
-      "command": "exa-mcp-server",           // 或用 npx
-      "args": [],
-      "env": {
-        "EXA_API_KEY": "<你的-exa-apiKey>"
-      }
+      "url": "https://mcp.exa.ai/mcp",
+      "lifecycle": "eager"
     },
     "context7": {
-      "command": "context7",
-      "args": [],
-      "lifecycle": "eager"                    // 可选：启动即加载
+      "url": "https://mcp.context7.com/mcp"
     },
     "searchcode": {
-      "command": "searchcode-mcp",
-      "args": [],
-      "lifecycle": "lazy"                     // 可选：用时再加载
+      "url": "https://api.searchcode.com/v1/mcp"
     }
   }
 }
 ```
 
-> **注意**：以上 `command` / `env` 字段为示例形态，不同 MCP 的实际启动命令与所需密钥不同。**务必以各 MCP 官方文档为准**（`exa`、`context7`、`searchcode` 各自的官方提供接入说明）。
+### 为什么 exa 用 `eager`？
 
-## 4. 通用做法：接入任意第三方 MCP
+联网搜索是全新会话里 pi 最常第一个去调的能力。**启动时就建连**（而不是等第一次工具调用才连），意味着等 pi 真正需要搜索时，连接已就绪。另外两个用默认的 `lazy`（用时再加载），因为它们只在明确的主动查询时才会触发。
 
-当你想接入不在上表里的第三方 MCP（含联网检索工具）：
+### 三种服务器的用途
 
-1. 查阅该工具官方提供的 MCP 接入文档，找到其 server 名称、启动命令、所需鉴权。
-2. 在 `~/.pi/agent/mcp.json` 的 `mcpServers` 里新增一项。
-3. 需要鉴权的密钥按官方指引放在 `env` / `auth.json` 对应位置。
+| MCP | URL | 用途 |
+|---|---|---|
+| **exa** | `https://mcp.exa.ai/mcp` | 联网/网页搜索（当前信息、新闻、事实）|
+| **context7** | `https://mcp.context7.com/mcp` | 库与框架的最新文档检索 |
+| **searchcode** | `https://api.searchcode.com/v1/mcp` | 公开 git 仓库与开源代码搜索 |
+
+## 3. 配置 MCP 使用指引（AGENTS.md）
+
+创建 `~/.pi/agent/AGENTS.md`，写入以下 MCP 使用指引。**若文件已存在，把这段追加进去而非覆盖**；若指引已在，不要重复。
+
+> `exa` 放最前，因为新会话开头通常第一时间需要联网搜索。
+
+```markdown
+## MCP
+
+- Use exa for web search (current information, news, facts).
+- Use context7 to look up library and framework documentation.
+- Use searchcode to search and analyze public git repositories.
+```
+
+> 这三台 MCP 正是全局 `AGENTS.md` 指引里指明的工具，没有它们那些指引就无处可查。
+
+## 4. 已有其它 agent（Cursor / Claude Code / Codex）的 MCP 配置？
+
+若你已在 Cursor / Claude Code / Codex 里配过 MCP，优先在任一 pi 会话里用 **`/mcp setup`** 导入它们，而不是手写 `mcp.json`。
+
+## 5. 接入任意第三方 MCP（通用做法）
+
+当你想接入更多第三方 MCP：
+
+1. 查该工具官方提供的 MCP server `url`。
+2. 在 `~/.pi/agent/mcp.json` 的 `mcpServers` 里新增一项，格式同上。
+3. 是否需要 `eager` / 鉴权（`env` / header）按该工具官方说明。
 4. 重启 pi，在对话中调用其工具验证。
 
-> 本仓库文档**不内置**第三方联网 MCP 的名称配置，避免与各工具版本漂移；请以官方为准。
+> 第三方联网工具的 MCP server 各不相同，以各工具官方推荐为准。本文不内置任何第三方具体配置，避免与工具版本漂移。
 
-## 5. Verify / Activate
+## Verify / Activate
 
-- **验证配置**：重启 `pi` 后，在 `.pi` 会话里询问 pi 「你能使用哪些 MCP 工具」，确认刚声明的 server 出现。
-- **Activate**：多数 MCP 在 pi 中是自动激活的；部分需在 `settings.json` / 交互界面启用。
+- 重启 `pi` 后，在会话里询问「你能用哪些 MCP 工具」，确认三个 server 出现。
+- MCP 服务器随 pi 启动自动加载（`eager` 起连、`lazy` 用时连），无需额外激活。
 
-## 6. 卸载
+## 卸载
 
-- **移除某个 MCP**：编辑 `mcp.json`，删除对应 `mcpServers` 中的条目即可。
-- **移除 pi-mcp-adapter 适配器**：`pi remove npm:pi-mcp-adapter`
-- 删除相关配置文件后重启 pi 生效。
+- 移除某个 MCP：编辑 `mcp.json`，删除对应 `mcpServers` 条目即可。
+- 移除适配器：`pi remove npm:pi-mcp-adapter`
+- 同时清理 `AGENTS.md` 里对应 MCP 指引段落（可选），重启 pi 生效。

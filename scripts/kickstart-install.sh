@@ -83,7 +83,7 @@ JSON
   echo "    [写] models.json（占位模板：baseUrl/apiKey/模型均需按文档替换）。"
 }
 
-# mcp.json —— 若不存在则不生成，避免误导（MCP 按各服务器官方配置，见 docs/installation-mcp.md）
+# mcp.json —— fresh 时铺入推荐三件套；merge 且不存在则不生成（避免凭空创建）
 write_mcp() {
   local path="${PI_AGENT_DIR}/mcp.json"
   if [ -f "${path}" ]; then
@@ -93,12 +93,23 @@ write_mcp() {
   if [ "${MODE}" = "--fresh" ]; then
     cat > "${path}" <<'JSON'
 {
-  "mcpServers": {}
+  "mcpServers": {
+    "exa": {
+      "url": "https://mcp.exa.ai/mcp",
+      "lifecycle": "eager"
+    },
+    "context7": {
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "searchcode": {
+      "url": "https://api.searchcode.com/v1/mcp"
+    }
+  }
 }
 JSON
-    echo "    [写] mcp.json（空骨架：需按 docs/installation-mcp.md 与各服务器官方文档配置）。"
+    echo "    [写] mcp.json（exa/context7/searchcode 三件套，见 docs/installation-mcp.md）。"
   else
-    echo "    mcp.json 不存在且为 merge 模式，跳过（不会凭空创建），请按需自行创建。"
+    echo "    mcp.json 不存在且为 merge 模式，跳过（不会凭空创建），请按需自行创建（见 docs/installation-mcp.md）。"
   fi
 }
 

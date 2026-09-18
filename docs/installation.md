@@ -6,6 +6,8 @@
 2. **[铺装配置文件](#2-铺装配置文件)**
 3. **[选装扩展与技能](#3-选装扩展与技能)**
 
+> **关于 MCP**：联网检索（exa / context7 / searchcode）三件套是关联部署的**推荐必装**，能立即获得联网搜索、库文档、开源代码检索能力（见 [installation-mcp.md](installation-mcp.md)）。若团队明确「离线自足」也可跳过，只是 pi 会少了联网工具。
+
 每一步都可在单独的文章里展开。建议先完整读完本文，再根据团队的「部署基线」逐个安装需要的扩展。
 
 > **约定**：下文以 `~/.pi/agent` 作为 pi 的全局配置目录（默认路径）。若你的环境中 pi 配置目录不同，请把命令中的路径替换成实际路径。
@@ -82,23 +84,19 @@ bash scripts/kickstart-install.sh --fresh
 bash scripts/kickstart-install.sh --merge
 ```
 
-脚本真实逻辑与安全语义见 [scripts/kickstart-install.sh](#脚本说明)，它会把本仓库提供的模板（如 `settings.json`、`models.json`、`mcp.json`）对应铺到 `~/.pi/agent`。
+脚本的功能与安全语义详见文末脚本章节（`scripts/kickstart-install.sh`），它会**内嵌生成**配置文件骨架到目标目录：`settings.json`、`models.json`（通用占位、不含真实 key）、`mcp.json`（MCP 三件套，见 [installation-mcp.md](installation-mcp.md)）。
 
 ### 方式二：手动复制（merge 语义）
 
-合并部署参考 `cp -an`（`-a` 归档、`-n` 不覆盖已有文件）：
+若你想手动保留已有配置，可参考 `cp -an`（`-a` 归档、`-n` 不覆盖已有文件），把旧环境备份（如 `~/.pi/agent.bak/`）复制回去：
 
 ```bash
-# 全新部署可用覆盖复制
-cp -r templates/settings.json ~/.pi/agent/settings.json
-
-# 已有环境建议配合 -n 不覆盖
 mkdir -p ~/.pi/agent
-cp -an templates/settings.json ~/.pi/agent/settings.json
-cp -an templates/models.json ~/.pi/agent/models.json
+cp -an ~/.pi/agent.bak/settings.json ~/.pi/agent/settings.json
+cp -an ~/.pi/agent.bak/models.json ~/.pi/agent/models.json
 ```
 
-> ⚠️ **安全提示**：本仓库提供的 `models.json` / `settings.json` 模板中**不含任何真实 apiKey**，都使用占位符；真实密钥请按第 4 章「模型与鉴权」自行填写或按 `auth.json` 方案配置。具体做法见 [docs/installation-mcp.md](./installation-mcp.md) 中关于鉴权的说明。
+> ⚠️ **安全提示**：上面复制的应是**你自己备份的旧配置**，而非本仓库内容。本仓库不携带 `settings.json` / `models.json` 模板；模型供应商按 [installation-models.md](./installation-models.md) 自填或由 pi 首次运行向导生成。任何配置中都**不要写入真实 apiKey**，建议按 `auth.json` 方案填写。
 
 ---
 
@@ -120,7 +118,7 @@ pi 的能力通过 **扩展包** 与 **技能** 增强。扩展通过 `pi instal
 
 | 类别 | 扩展/技能 | 安装文档 |
 |---|---|---|
-| 联网检索 | MCP 服务器（exa / context7 / searchcode） | [installation-mcp.md](./installation-mcp.md) |
+| 联网检索（必装） | MCP 服务器（exa / context7 / searchcode） | [installation-mcp.md](installation-mcp.md) |
 | 代码理解 | codegraph | [installation-codegraph.md](./installation-codegraph.md) |
 | 多代理 | pi-subagents | [installation-subagents.md](./installation-subagents.md) |
 | 权限管控 | pi-permission-system | [installation-permission-system.md](./installation-permission-system.md) |
@@ -159,7 +157,7 @@ pi 的能力通过 **扩展包** 与 **技能** 增强。扩展通过 `pi instal
 
 ## 脚本：`scripts/kickstart-install.sh`
 
-一键安装脚本的职责**仅为基础文件铺装**（复制配置文件模板到 `~/.pi/agent`），它**不会**自动执行 `pi install` 安装扩展。扩展的 `pi install` 命令请按各 `installation-*.md` 文档手动执行，以保证步骤可审计。
+一键安装脚本的职责**仅为基础配置文件铺装**：在目标目录**内嵌生成**骨架（`settings.json`、`models.json`、含 MCP 三件套的 `mcp.json`）。它**不会**自动执行 `pi install` 安装扩展；扩展的 `pi install` 命令请按各 `installation-*.md` 文档手动执行，以保证步骤可审计。
 
 ```
 用法：
@@ -173,7 +171,8 @@ pi 的能力通过 **扩展包** 与 **技能** 增强。扩展通过 `pi instal
 
 ## 下一步
 
-- 配置模型供应商与 API 密钥，见 [installation-models.md](./installation-models.md)（含 `models.json` 通用模板与 `auth.json` 鉴权说明）。
+- 安装**联网 MCP 三件套**（exa / context7 / searchcode）并配置 `AGENTS.md` 指引，见 [installation-mcp.md](installation-mcp.md)。
+- 配置模型供应商与鉴权，见 [installation-models.md](installation-models.md)（含 `models.json` 通用模板与 `auth.json` 鉴权说明）。
 - 完整了解各扩展，按「第 3 节」的表格逐个安装。
 
 ### 卸载（Uninstall）
