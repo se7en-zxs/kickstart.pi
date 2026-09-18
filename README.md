@@ -42,48 +42,40 @@ bash scripts/kickstart-install.sh --merge
 
 ---
 
-## 文档地图
+## 目录结构
 
-| 文档 | 内容 |
+本仓库是一个**页面式文档库**，每个核心文件都有明确职责：
+
+| 路径 | 内容说明 |
 |---|---|
-| [docs/installation.md](docs/installation.md) | 核心三步 + 扩展索引（主文档） |
-| [docs/installation-models.md](docs/installation-models.md) | 模型供应商通用模板与鉴权 |
-| [docs/installation-mcp.md](docs/installation-mcp.md) | MCP 服务器（exa / context7 / searchcode 等）|
-| [docs/installation-codegraph.md](docs/installation-codegraph.md) | codegraph 代码理解 |
-| [docs/installation-subagents.md](docs/installation-subagents.md) | pi-subagents 多代理 |
-| [docs/installation-permission-system.md](docs/installation-permission-system.md) | pi-permission-system 权限管控 |
-| [docs/installation-sol-pi.md](docs/installation-sol-pi.md) | SoL-Pi 长上下文 |
-| [docs/installation-rtk-optimizer.md](docs/installation-rtk-optimizer.md) | pi-rtk-optimizer Token 优化 |
-| [docs/installation-open-tui.md](docs/installation-open-tui.md) | pi-open-tui 交互界面 |
-| [docs/installation-deepseek-cache.md](docs/installation-deepseek-cache.md) | pi-deepseek-cache 缓存加速 |
-| [docs/installation-matt-pocock-skills.md](docs/installation-matt-pocock-skills.md) | mattpocock skills 技能集 |
-| [docs/installation-theme.md](docs/installation-theme.md) | 主题 / 美化 |
+| `README.md` | 本文件：项目简介 + 快速入门三步走 + 文档索引 |
+| `.gitignore` | 忽略本地会话目录（`.pi/`）、临时文件（`*.swp`）、鉴权文件（`auth.json`）等 |
+| `CONTEXT.md` | 术语表：全仓库核心主体与配置文件术语的统一定义 |
+| `scripts/kickstart-install.sh` | 一键铺装脚本（`--fresh` 全新部署 / `--merge` 已有环境保留配置） |
+| `docs/installation.md` | **核心文档**：三步完成部署 + 可选扩展「推荐部署基线」+ 全部扩展索引表 |
+| `docs/installation-models.md` | 模型供应商通用模板、`auth.json` 鉴权、模型选择链路（`settings.json`）|
+| `docs/installation-mcp.md` | MCP 服务器接入：exa / context7 / searchcode 等，及接入任意第三方 MCP 的通用做法 |
+| `docs/installation-codegraph.md` | codegraph 代码理解：语义搜索 / 调用图 / 变更影响分析 |
+| `docs/installation-subagents.md` | pi-subagents：并行多子代理的任务处理 |
+| `docs/installation-permission-system.md` | pi-permission-system：操作权限强制管控 |
+| `docs/installation-sol-pi.md` | SoL-Pi：长上下文优化（压缩 / 打包）|
+| `docs/installation-rtk-optimizer.md` | pi-rtk-optimizer：Token 消耗优化 |
+| `docs/installation-open-tui.md` | pi-open-tui：终端 TUI 交互界面 |
+| `docs/installation-deepseek-cache.md` | pi-deepseek-cache：DeepSeek 模型缓存加速 |
+| `docs/installation-matt-pocock-skills.md` | mattpocock skills：工程化提示技能集 |
+| `docs/installation-theme.md` | 主题 / 美化：界面观感调节 |
 
-### 场景索引
+> 每个 `docs/installation-*.md` 都自含 **Install / Verify / Activate / Uninstall** 四个章节，可独立照做。
+
+### 场景指引
 
 - **想快速装全一套** → 见 [docs/installation.md](docs/installation.md#3-选装扩展与技能) 的「推荐部署基线」。
 - **只想先跑起来** → 完成上面的三步走即可。
-- **想看全部可选扩展** → 见 [docs/installation.md](docs/installation.md#扩展完成索引) 的下表。
-
----
-
-## 目录结构
-
-```
-kickstart.pi/
-├── README.md
-├── .gitignore
-├── CONTEXT.md                  # 术语表
-├── scripts/
-│   └── kickstart-install.sh    # 一键铺装脚本（fresh / merge）
-└── docs/
-    ├── installation.md
-    ├── installation-*.md       # 每个扩展/主题一篇
-    └── adr/                    # 决策记录
-```
+- **想看全部可选扩展** → 见 [docs/installation.md](docs/installation.md#扩展总索引) 的下表。
 
 ## 维护约定
 
-- **新增扩展 / 技能**：按 `docs/installation-<name>.md` 的模式新增一篇文档（含 Install / Verify / Activate / Uninstall），并在 `docs/installation.md` 的索引表登记。
+- **新增扩展 / 技能**：按 `docs/installation-<name>.md` 的模式新增一篇扩展（含 Install / Verify / Activate / Uninstall），并在 `docs/installation.md` 的索引表登记。
 - **不要写真实密钥**：模板一律用占位符，密钥由读者自行填到 `auth.json` 或对应文件的鉴权字段。
-- **model 变更**：如需替换模型供应商，只改 `models.json` 通用模板示例，不绑定具体厂商。
+- **增量变更**：如需替换模型供应商，只改 `models.json` 通用模板示例，不指标具体厂商。
+- **临时决策记录不提交**：仓库内开发过程中的 ADR（`docs/adr/`）为本地草稿，**不进入版本库**。
