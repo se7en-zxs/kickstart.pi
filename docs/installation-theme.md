@@ -17,6 +17,29 @@ pi 的界面主题与美化通过 `~/.pi/agent/settings.json` 中的 `theme` 字
 - 修改后重启 pi 生效。
 - 若想使用更多主题主题，可安装主题扩展或参考 pi 生态的主题包（见 [installation.md](./installation.md) 索引中的「主题 / 美化」类目）。
 
+## 自定义主题
+
+pi 支持自定义主题：将主题 JSON 放入 `~/.pi/agent/themes/` 目录，文件 `name` 字段即为主题名，再在 `settings.json` 中引用。
+
+本仓库自带一份自定义主题：[`themes/hbuilderx-push-light.json`](../themes/hbuilderx-push-light.json)（HBuilderX Push 浅色风格）。
+
+安装：
+
+```bash
+mkdir -p ~/.pi/agent/themes
+cp themes/hbuilderx-push-light.json ~/.pi/agent/themes/
+```
+
+启用：在 `~/.pi/agent/settings.json` 中设置：
+
+```jsonc
+{
+  "theme": "hbuilderx-push-light"
+}
+```
+
+修改后重启 pi 生效。
+
 ## 美化（结合 TUI）
 
 - 搭配 pi-open-tui 时，可在 `open-tui.json` 中开启 `useNerdIcons`、状态栏等美化项（见对应文档）。
