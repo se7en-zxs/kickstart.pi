@@ -137,6 +137,7 @@ pi 的能力通过 **扩展包** 与 **技能** 增强。扩展通过 `pi instal
 | 交互界面 | pi-open-tui | [installation-open-tui.md](./installation-open-tui.md) |
 | 缓存加速 | pi-deepseek-cache | [installation-deepseek-cache.md](./installation-deepseek-cache.md) |
 | 技能集 | mattpocock skills | [installation-matt-pocock-skills.md](./installation-matt-pocock-skills.md) |
+| 技能集 | andrej-karpathy-skills（编码纪律） | [installation-karpathy-guidelines.md](./installation-karpathy-guidelines.md) |
 | 外观 | 主题 / 美化 | [installation-theme.md](./installation-theme.md) |
 
 ### 3.2 扩展完整索引（含未写详情的项）
@@ -156,6 +157,7 @@ pi 的能力通过 **扩展包** 与 **技能** 增强。扩展通过 `pi instal
 | pi-open-tui | 交互 | 终端 TUI 界面 | [installation-open-tui.md](./installation-open-tui.md) |
 | pi-deepseek-cache | 缓存 | deepseek 缓存命中 | [installation-deepseek-cache.md](./installation-deepseek-cache.md) |
 | mattpocock skills | 技能 | 工程化提示技能集 | [installation-matt-pocock-skills.md](./installation-matt-pocock-skills.md) |
+| andrej-karpathy-skills | 技能 | Karpathy 编码纪律（简洁 / 外科手术 / 成功标准） | [installation-karpathy-guidelines.md](./installation-karpathy-guidelines.md) |
 | 全局 AGENTS.md | 全局行为 | 中文语言要求 + MCP 指引 | [installation-agents.md](./installation-agents.md) |
 | 主题 / 美化 | 外观 | 界面主题、美化 | [installation-theme.md](./installation-theme.md) |
 | openspec | 规格 | OpenSpec 规范工作流 | 见官方 |

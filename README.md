@@ -66,6 +66,7 @@ bash scripts/kickstart-install.sh --merge
 | `docs/installation-open-tui.md` | pi-open-tui：终端 TUI 交互界面 |
 | `docs/installation-deepseek-cache.md` | pi-deepseek-cache：DeepSeek 模型缓存加速 |
 | `docs/installation-matt-pocock-skills.md` | mattpocock skills：`npx skills` 命令行安装的工程技能集（grilling / TDD / 调试 / 评审等）|
+| `docs/installation-karpathy-guidelines.md` | andrej-karpathy-skills：Karpathy 编码纪律（简单优先 / 外科手术式改动 / 成功标准）|
 | `docs/installation-theme.md` | 主题 / 美化：界面观感调节 |
 
 > 每个 `docs/installation-*.md` 都自含 **Install / Verify / Activate / Uninstall** 四个章节，可独立照做。
